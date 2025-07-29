@@ -1,12 +1,11 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
+import { DashboardLink } from "../utils/dashboard-link";
+import { auth } from "@/lib/auth";
+import { UserAccount } from "../utils/user-account";
 
-export function Header() {
-  const pathname = usePathname();
+export async function Header() {
+  const session = await auth();
 
   return (
     <header className="w-full border-b border-border bg-background px-4 py-2">
@@ -16,19 +15,9 @@ export function Header() {
         </Link>
 
         <div className="flex items-center space-x-4">
-          <Link
-            href="/dashboard"
-            className={cn(
-              "text-sm font-medium transition-colors hover:text-primary",
-              pathname === "/dashboard"
-                ? "text-primary"
-                : "text-muted-foreground"
-            )}
-          >
-            Dashboard
-          </Link>
-
+          <DashboardLink />
           <ThemeToggle />
+          <UserAccount session={session} />
         </div>
       </div>
     </header>
