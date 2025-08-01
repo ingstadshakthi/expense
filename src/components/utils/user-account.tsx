@@ -33,6 +33,7 @@ export function UserAccount({ session }: Props) {
       <DropdownMenuTrigger asChild className="cursor-pointer">
         <h3 className="flex items-center gap-1 md:gap-2">
           <img src={session.user.image} className="h-8 rounded-full" />
+          <span>{session.user.name?.split(" ")[0]}</span>
         </h3>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
