@@ -1,0 +1,13 @@
+{
+  "$schema": "https://oxlint.dev/schema.json",
+  "rules": {
+    "no-unused-vars": "warn",
+    "jsx-a11y/alt-text": "warn",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/aria-role": "warn",
+    "jsx-a11y/aria-props": "warn",
+    "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/no-redundant-roles": "warn",
+    "jsx-a11y/tabindex-no-positive": "warn"
+  }
+}

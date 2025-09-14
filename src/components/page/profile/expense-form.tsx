@@ -44,7 +44,7 @@ export function ExpenseForm({ handleAddNewExpense }: Props) {
       <Button className="mt-2 w-full" disabled={isPending}>
         {isPending ? (
           <>
-            <Loader2Icon /> 'Please wait'
+            <Loader2Icon /> Please wait
           </>
         ) : (
           "Add"
