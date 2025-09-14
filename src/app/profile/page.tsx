@@ -9,17 +9,17 @@ export default async function ProfilePage() {
     return <div className="p-6 text-center">Unauthorized</div>;
   }
 
-  const [expenseTypes, paymentMethods] = await Promise.all([
-    getExpense(user.id),
-    getPayment(user.id),
-  ]);
+  // const [expenseTypes, paymentMethods] = await Promise.all([
+  //   getExpense(user.id),
+  //   getPayment(user.id),
+  // ]);
 
   return (
     <main className="mx-auto max-7xl">
-      <ProfileClient
+      {/* <ProfileClient
         expenseTypes={expenseTypes}
         paymentMethods={paymentMethods}
-      />
+      /> */}
     </main>
   );
 }

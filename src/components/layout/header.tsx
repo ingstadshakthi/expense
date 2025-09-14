@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
-import { DashboardLink } from "../utils/dashboard-link";
 import { auth } from "@/lib/auth";
 import { UserAccount } from "../utils/user-account";
+import ClientLink from "../utils/client-link";
 
 export async function Header() {
   const session = await auth();
@@ -15,7 +15,13 @@ export async function Header() {
         </Link>
 
         <div className="flex items-center space-x-4">
-          <DashboardLink />
+          <ClientLink
+            className="text-md font-medium transition-colors hover:text-primary text-bold"
+            href="/dashboard"
+            hideOnMatch
+          >
+            Dashboard
+          </ClientLink>
           <ThemeToggle />
           <UserAccount session={session} />
         </div>

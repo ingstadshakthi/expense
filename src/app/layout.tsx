@@ -29,7 +29,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          {children}
+          <main className="mx-auto max-w-7xl">{children}</main>
         </ThemeProvider>
       </body>
     </html>
