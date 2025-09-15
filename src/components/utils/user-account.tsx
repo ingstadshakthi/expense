@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import type { Session } from "next-auth";
-import { signOut } from "@/lib/auth";
 import { signOutAction } from "@/lib/action";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

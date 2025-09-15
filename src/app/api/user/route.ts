@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
+import { DEFAULT_EXPENSE_TYPES } from "@/constants";
+import { ExpenseType } from "@/models/ExpenseType";
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +19,14 @@ export async function POST(req: NextRequest) {
     const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
-      await User.create({ name, email, image });
+      const newUser = await User.create({ name, email, image });
+
+      const expenses = DEFAULT_EXPENSE_TYPES.map((exp) => ({
+        ...exp,
+        user: newUser._id,
+      }));
+
+      await ExpenseType.insertMany(expenses);
     }
 
     return NextResponse.json({ success: true });
@@ -25,7 +34,7 @@ export async function POST(req: NextRequest) {
     console.error("API Error:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

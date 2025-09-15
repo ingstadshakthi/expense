@@ -1,6 +1,3 @@
-import ProfileClient from "@/components/page/profile/profile-client";
-import { getExpense } from "@/controllers/expense-type";
-import { getPayment } from "@/controllers/payment-type";
 import { getUser } from "@/controllers/user";
 
 export default async function ProfilePage() {

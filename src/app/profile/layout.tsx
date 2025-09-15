@@ -9,7 +9,7 @@ interface Props {
 export default function ProfileLayout({ children }: Props) {
   return (
     <>
-      <Nav className="w-full h-13 items-center text-bold text-md flex justify-end gap-8 border-b">
+      <Nav className="w-full h-13 items-center text-bold text-md flex justify-end gap-8 border-b px-4">
         <ClientLink href="/profile" hideOnMatch>
           Profile
         </ClientLink>

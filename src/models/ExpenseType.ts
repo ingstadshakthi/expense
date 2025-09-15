@@ -1,18 +1,20 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
 export interface IExpenseType extends Document {
-  userId?: mongoose.Types.ObjectId;
+  user: Types.ObjectId;
   name: string;
+  color: string;
 }
 
 const ExpenseTypeSchema = new Schema<IExpenseType>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", default: null },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     name: { type: String, required: true },
+    color: { type: String, default: "#9ca3af" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export const ExpenseType =
+export const ExpenseType: Model<IExpenseType> =
   mongoose.models.ExpenseType ||
   mongoose.model<IExpenseType>("ExpenseType", ExpenseTypeSchema);

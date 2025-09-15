@@ -3,6 +3,9 @@ import "./globals.css";
 import { Roboto } from "next/font/google";
 import { ThemeProvider } from "../components/providers/theme-provider";
 import { Header } from "../components/layout/header";
+import { AlertDialogProvider } from "@/components/providers/alert-dialog";
+import { LoaderProvider } from "@/components/providers/loader-provider";
+import { Toaster } from "sonner";
 
 const roboto = Roboto({
   weight: "400",
@@ -22,14 +25,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${roboto.className} antialiased`}>
+        <Toaster position="top-right" richColors closeButton />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <main className="mx-auto max-w-7xl">{children}</main>
+          <LoaderProvider>
+            <AlertDialogProvider>
+              <Header />
+              <main className="mx-auto max-w-7xl">{children}</main>
+            </AlertDialogProvider>
+          </LoaderProvider>
         </ThemeProvider>
       </body>
     </html>
