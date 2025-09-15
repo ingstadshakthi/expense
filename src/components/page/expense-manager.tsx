@@ -8,13 +8,13 @@ import { X } from "lucide-react";
 import { toast } from "sonner";
 import { ColorPicker } from "@/components/ui/color-picker";
 import {
-  ExpenseType,
   onExpenseTypeDelete,
-  onExpenseUpdate,
-} from "@/controllers/profile";
+  onExpenseTypeUpsert,
+} from "@/controllers/profile/action";
 import { useAlertDialog } from "@/hooks/alert-dialog";
 import { useLoader } from "../providers/loader-provider";
 import { logger } from "@/lib/logger";
+import { ExpenseType } from "@/controllers/profile/type";
 
 interface Props {
   expenseTypes: ExpenseType[];
@@ -23,18 +23,40 @@ interface Props {
 export function ExpenseManager({ expenseTypes }: Props) {
   const [name, setName] = useState("");
   const [color, setColor] = useState("#f87171");
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [selected, setSelected] = useState<string>();
+  const [selected, setSelected] = useState<string | undefined>();
   const { openAlert } = useAlertDialog();
   const { showLoader, hideLoader } = useLoader();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name) return;
-    if (editingId) await onExpenseUpdate({ name, color }, selected);
+    if (selected) {
+      async function onConfirm() {
+        showLoader();
+        const { success, message } = await onExpenseTypeUpsert(
+          { name, color },
+          selected,
+        );
+        logger.info(message);
+        if (success) {
+          toast(message);
+        } else {
+          toast.error(message);
+        }
+        hideLoader();
+      }
+      openAlert({
+        title: "Are you Sure?",
+        message: `This action cannot be undone. This operation will update all the expenses related to ${name}`,
+        onConfirm,
+        onCancel: () => console.log("cancelled"),
+      });
+    } else {
+      await onExpenseTypeUpsert({ name, color });
+    }
     setName("");
     setColor("#f87171");
-    setEditingId(null);
+    setSelected(undefined);
   };
 
   function handleDelete(id: string) {
@@ -61,7 +83,6 @@ export function ExpenseManager({ expenseTypes }: Props) {
   const handleEdit = (expense: ExpenseType) => {
     setName(expense.name);
     setColor(expense.color);
-    setEditingId(expense.name);
     setSelected(expense.id);
   };
 
@@ -109,7 +130,7 @@ export function ExpenseManager({ expenseTypes }: Props) {
           <ColorPicker value={color} onChange={setColor} />
         </div>
 
-        <Button type="submit">{editingId ? "Update" : "Add"} Expense</Button>
+        <Button type="submit">{selected ? "Update" : "Add"} Expense</Button>
       </form>
     </div>
   );
