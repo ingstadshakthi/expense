@@ -2,7 +2,6 @@
 
 import { signInAction } from "@/lib/action";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 function SignInButton() {
   return (
