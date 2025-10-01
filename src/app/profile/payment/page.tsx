@@ -1,10 +1,12 @@
-import { getUser } from "@/controllers/user";
+import { getUserPaymentTypes } from "@/controllers/profile/action";
+import { PaymentManager } from "@/components/page/payment-manager";
 
 export default async function ProfileExpensePage() {
-  const user = await getUser();
-  if (!user) {
-    return <div className="p-6 text-center">Unauthorized</div>;
-  }
+  const paymentTypes = await getUserPaymentTypes();
 
-  return <main className="mx-auto max-7xl"></main>;
+  return (
+    <article className="max-7xl mx-auto">
+      <PaymentManager paymentTypes={paymentTypes} />
+    </article>
+  );
 }

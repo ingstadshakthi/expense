@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
-import { DEFAULT_EXPENSE_TYPES } from "@/constants";
+import { DEFAULT_EXPENSE_TYPES, DEFAULT_PAYMENT_TYPES } from "@/constants";
 import { ExpenseType } from "@/models/ExpenseType";
+import { PaymentType } from "@/models/PaymentMethod";
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,7 +27,14 @@ export async function POST(req: NextRequest) {
         user: newUser._id,
       }));
 
-      await ExpenseType.insertMany(expenses);
+        const payments = DEFAULT_PAYMENT_TYPES.map((payment)=>({
+        ...payment,
+        user: newUser._id
+      }))
+
+      await Promise.all([ExpenseType.insertMany(expenses), PaymentType.insertMany(payments)]);
+      
+
     }
 
     return NextResponse.json({ success: true });

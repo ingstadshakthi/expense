@@ -10,3 +10,7 @@ export const DEFAULT_EXPENSE_TYPES = [
   { name: "Bills", color: "#64748b" },
   { name: "Others", color: "#9ca3af" },
 ];
+
+export const DEFAULT_PAYMENT_TYPES = [
+  {name: 'cash', color: '#3b82f6'}
+]

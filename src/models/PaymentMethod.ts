@@ -1,20 +1,20 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
-export interface IPaymentMethod extends Document {
-  userId: mongoose.Types.ObjectId;
+export interface IPaymentType extends Document {
+  user: Types.ObjectId;
   name: string;
+  color: string;
 }
 
-const PaymentMethodSchema = new Schema<IPaymentMethod>(
+const PaymentTypeSchema = new Schema<IPaymentType>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", index: true },
-    name: String,
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    name: { type: String, required: true },
+    color: { type: String, default: "#9ca3af" },
   },
   { timestamps: true }
 );
 
-PaymentMethodSchema.index({ userId: 1, name: 1 }, { unique: true });
-
-export const PaymentMethod =
-  mongoose.models.PaymentMethod ||
-  mongoose.model<IPaymentMethod>("PaymentMethod", PaymentMethodSchema);
+export const PaymentType: Model<IPaymentType> =
+  mongoose.models.PaymentType ||
+  mongoose.model<IPaymentType>("PaymentType", PaymentTypeSchema);
