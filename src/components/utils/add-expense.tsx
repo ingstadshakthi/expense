@@ -46,13 +46,15 @@ export function AddExpenseButton() {
   return (
     <>
       <Button onClick={onFormOpen}>Add Expense</Button>
-      <ExpenseFormDialog
-        open={open}
-        onOpenChange={setOpen}
-        expenseTypes={expenseTypes}
-        paymentTypes={paymentTypes}
-        onSubmit={onAddExpense}
-      />
+      {open && (
+        <ExpenseFormDialog
+          open={open}
+          onOpenChange={setOpen}
+          expenseTypes={expenseTypes}
+          paymentTypes={paymentTypes}
+          onSubmit={onAddExpense}
+        />
+      )}
     </>
   );
 }

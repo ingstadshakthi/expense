@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,11 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Dialog = dynamic(() => import("@/components/ui/dialog").then(m => m.Dialog));
 const DialogContent = dynamic(() => import("@/components/ui/dialog").then(m => m.DialogContent));
@@ -42,7 +39,7 @@ interface ExpenseData {
   amount: number;
   expenseType: string;
   paymentType: string;
-  date: Date; // new field
+  date: Date;
 }
 
 interface Props {
@@ -67,7 +64,7 @@ export function ExpenseFormDialog({
   const [amount, setAmount] = useState("");
   const [expenseType, setExpenseType] = useState("");
   const [paymentType, setPaymentType] = useState("");
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {
     if (initialData) {
@@ -166,32 +163,16 @@ export function ExpenseFormDialog({
             />
           </div>
 
-          {/* Date */}
           <div className="flex flex-col gap-2">
-            <Label>Date</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  disabled={day => day > new Date()} // ✅ block future dates
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <Label>Date & Time</Label>
+            <DatePicker
+              id="date"
+              selected={date}
+              onChange={date => (date ? setDate(date) : setDate(new Date()))}
+              maxDate={new Date()}
+              className="w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              dateFormat="MMMM d, yyyy"
+            />
           </div>
 
           {/* Expense Type */}
