@@ -91,3 +91,11 @@ export async function onPaymentTypeUpsert(
     return { success: false, message: "Payment type upsert failed" };
   }
 }
+
+export async function getUserExpensePaymentDetails() {
+  const [expenseTypes, paymentTypes] = await Promise.all([
+    getUserExpenseTypes(),
+    getUserPaymentTypes(),
+  ]);
+  return [expenseTypes, paymentTypes];
+}

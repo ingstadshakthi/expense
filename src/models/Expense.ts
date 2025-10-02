@@ -1,34 +1,63 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IExpense extends Document {
   userId: mongoose.Types.ObjectId;
-  amount: number;
-  date: Date;
+  shortName: string;
   description?: string;
-  category: mongoose.Types.ObjectId;
-  paymentMethod: mongoose.Types.ObjectId;
+  amount: number;
+  expenseType: mongoose.Types.ObjectId;
+  paymentType: mongoose.Types.ObjectId;
+  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const ExpenseSchema = new Schema<IExpense>(
+const ExpenseSchema: Schema<IExpense> = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", index: true },
-    amount: { type: Number, required: true },
-    date: { type: Date, required: true },
-    description: String,
-    category: {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+    shortName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    expenseType: {
       type: Schema.Types.ObjectId,
       ref: "ExpenseType",
       required: true,
     },
-    paymentMethod: {
+    paymentType: {
       type: Schema.Types.ObjectId,
-      ref: "PaymentMethod",
+      ref: "PaymentType",
       required: true,
+    },
+    date: {
+      type: Date,
+      required: true,
+      default: Date.now,
+      validate: {
+        validator: function (value: Date) {
+          return value <= new Date();
+        },
+        message: "Expense date cannot be in the future",
+      },
     },
   },
   { timestamps: true }
 );
-ExpenseSchema.index({ userId: 1, date: -1 });
 
-export const Expense =
+export const Expense: Model<IExpense> =
   mongoose.models.Expense || mongoose.model<IExpense>("Expense", ExpenseSchema);
