@@ -15,7 +15,7 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: "Expense",
-  description: "App to store and Analyse Daily Expense",
+  description: "App to store and Analyse Daily Expense ",
 };
 
 export default function RootLayout({
