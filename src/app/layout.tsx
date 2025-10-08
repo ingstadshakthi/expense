@@ -6,6 +6,7 @@ import { Header } from "../components/layout/header";
 import { AlertDialogProvider } from "@/components/providers/alert-dialog";
 import { LoaderProvider } from "@/components/providers/loader-provider";
 import { Toaster } from "sonner";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const roboto = Roboto({
   weight: "400",
@@ -35,7 +36,10 @@ export default function RootLayout({
           <LoaderProvider>
             <AlertDialogProvider>
               <Header />
-              <main className="mx-auto max-w-7xl px-4 xl:px-0">{children}</main>
+              <main className="mx-auto max-w-7xl px-4 xl:px-0">
+                {children}
+                <SpeedInsights />
+              </main>
             </AlertDialogProvider>
           </LoaderProvider>
         </ThemeProvider>
