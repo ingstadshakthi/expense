@@ -5,10 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getErrorMessage(
-  error: unknown,
-  fallback = "An unexpected error occurred",
-): string {
+export function getErrorMessage(error: unknown, fallback = "An unexpected error occurred"): string {
   if (!error) return fallback;
 
   if (error instanceof Error && error.message) return error.message;
@@ -19,4 +16,22 @@ export function getErrorMessage(
   }
 
   return fallback;
+}
+
+interface CustomError {
+  message: string;
+  errorObj: unknown;
+}
+
+export async function tryCatch<T>(promise: Promise<T>): Promise<[T, null] | [null, CustomError]> {
+  try {
+    const data = await promise;
+    return [data, null];
+  } catch (error) {
+    const customError = {
+      message: getErrorMessage(error),
+      errorObj: error,
+    };
+    return [null, customError];
+  }
 }

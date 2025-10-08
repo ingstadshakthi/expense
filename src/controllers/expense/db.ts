@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { Expense, IExpense } from "@/models/Expense";
 import { ExpenseData, UserExpenseData } from "@/types/expense";
+import { PaymentType } from "@/models/PaymentMethod";
+import { ExpenseType } from "@/models/ExpenseType";
 
 export const ExpenseDB = {
   async readByMonth(
@@ -8,12 +10,46 @@ export const ExpenseDB = {
     year: number,
     month: number,
     page = 1,
-    limit = 25
+    limit = 25,
+    expenseTypes?: string[],
+    paymentTypes?: string[]
   ): Promise<{ records: IExpense[]; total: number; page: number; totalPages: number }> {
     const start = new Date(year, month - 1, 1, 0, 0, 0);
     const end = new Date(year, month, 0, 23, 59, 59);
 
-    const query = { userId, date: { $gte: start, $lte: end } };
+    type Query = {
+      userId: mongoose.Types.ObjectId;
+      date: { $gte: Date; $lte: Date };
+      expenseType?: { $in: string[] };
+      paymentType?: { $in: string[] };
+    };
+
+    const query: Query = {
+      userId,
+      date: { $gte: start, $lte: end },
+    };
+
+    // ✅ Resolve expenseType names → ObjectIds
+    if (expenseTypes?.length && !expenseTypes.includes("All")) {
+      const expenseTypeDocs = await ExpenseType.find({
+        user: userId,
+        name: { $in: expenseTypes },
+      })
+        .select("_id")
+        .lean();
+      query.expenseType = { $in: expenseTypeDocs.map(doc => doc._id as string) };
+    }
+
+    // ✅ Resolve paymentType names → ObjectIds
+    if (paymentTypes?.length && !paymentTypes.includes("All")) {
+      const paymentTypeDocs = await PaymentType.find({
+        user: userId,
+        name: { $in: paymentTypes },
+      })
+        .select("_id")
+        .lean();
+      query.paymentType = { $in: paymentTypeDocs.map(doc => doc._id as string) };
+    }
 
     const total = await Expense.countDocuments(query);
     const totalPages = Math.ceil(total / limit);

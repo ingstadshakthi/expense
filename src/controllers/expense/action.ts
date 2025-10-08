@@ -23,12 +23,22 @@ export async function getExpensesByMonth(
   year: number,
   month: number,
   page = 1,
-  limit = 25
+  limit = 25,
+  expenseTypes?: string[],
+  paymentType?: string[]
 ): Promise<{ records: ExpenseDTO[]; total: number; page: number; totalPages: number }> {
   const user = await getUser();
   if (!user) return { records: [], total: 0, page: 1, totalPages: 1 };
 
-  return getUserExpensesByMonth(new mongoose.Types.ObjectId(user.id), year, month, page, limit);
+  return getUserExpensesByMonth(
+    new mongoose.Types.ObjectId(user.id),
+    year,
+    month,
+    page,
+    limit,
+    expenseTypes,
+    paymentType
+  );
 }
 
 /**

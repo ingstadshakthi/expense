@@ -50,14 +50,16 @@ export async function getUserExpensesByMonth(
   year: number,
   month: number,
   page = 1,
-  limit = 25
+  limit = 25,
+  expenseTypes?: string[],
+  paymentType?: string[]
 ): Promise<{ records: ExpenseDTO[]; total: number; page: number; totalPages: number }> {
   const {
     records,
     total,
     page: currentPage,
     totalPages,
-  } = await ExpenseDB.readByMonth(userId, year, month, page, limit);
+  } = await ExpenseDB.readByMonth(userId, year, month, page, limit, expenseTypes, paymentType);
 
   return {
     records: records.map(toExpenseDTO),

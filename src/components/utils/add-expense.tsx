@@ -20,17 +20,24 @@ interface PaymentType {
   name: string;
 }
 
-export function AddExpenseButton() {
+interface Props {
+  onLoadExpenseType?: ExpenseType[];
+  onLoadPaymentType?: PaymentType[];
+}
+
+export function AddExpenseButton({ onLoadExpenseType = [], onLoadPaymentType = [] }: Props) {
   const [open, setOpen] = useState(false);
-  const [expenseTypes, setExpenseTypes] = useState<ExpenseType[]>([]);
-  const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
+  const [expenseTypes, setExpenseTypes] = useState<ExpenseType[]>(onLoadExpenseType);
+  const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>(onLoadPaymentType);
 
   async function onFormOpen() {
     setOpen(true);
     startTransition(async () => {
-      const [expense, payment] = await getUserExpensePaymentDetails();
-      setExpenseTypes(expense);
-      setPaymentTypes(payment);
+      if (onLoadExpenseType.length === 0 || onLoadPaymentType.length === 0) {
+        const [expense, payment] = await getUserExpensePaymentDetails();
+        setExpenseTypes(expense);
+        setPaymentTypes(payment);
+      }
     });
   }
 

@@ -5,9 +5,7 @@ interface ErrorObj {
   error: unknown;
 }
 
-export async function tryCatch<T>(
-  promise: Promise<T>,
-): Promise<[T | null, ErrorObj | null]> {
+export async function tryCatch<T>(promise: Promise<T>): Promise<[T, null] | [null, ErrorObj]> {
   try {
     const data = await promise;
     return [data, null];

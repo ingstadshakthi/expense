@@ -1,129 +1,86 @@
-import { getExpensesByMonth } from "@/controllers/expense/action";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { AlertTriangle } from "lucide-react";
+
 import { format } from "date-fns";
 import { AddExpenseButton } from "@/components/utils/add-expense";
+import { tryCatch } from "@/lib/try-catch";
+import { getExpenseData } from "@/lib/expense";
+import { FilterControls } from "./filterControl";
+import { ExpenseContent } from "./expenseContent";
+import { MultiSelectDropdown } from "@/components/utils/multi-select";
+import { logger } from "@/lib/logger";
+import { getErrorMessage } from "@/lib/utils";
 
-function validateYearMonth(yearParam: string, monthParam: string) {
-  const year = Number(yearParam);
-  const month = Number(monthParam);
-
-  if (
-    isNaN(year) ||
-    isNaN(month) ||
-    year < 2000 ||
-    year > new Date().getFullYear() + 1 || // allow current +1 year max
-    month < 1 ||
-    month > 12
-  ) {
-    throw new Error("Invalid year or month in URL");
-  }
-
-  return { year, month };
+interface Props {
+  params: Promise<{ year: string; month: string }>;
+  searchParams: Promise<{ page?: string; expenseType?: string; paymentType?: string }>;
 }
 
-export default async function ExpensesPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ year: string; month: string }>;
-  searchParams: Promise<{ page?: string }>;
-}) {
+export default async function ExpensesPage({ params, searchParams }: Props) {
   const param = await params;
   const searchParam = await searchParams;
-  const { year, month } = validateYearMonth(param.year, param.month);
 
-  const page = Number(searchParam.page) || 1;
-  const limit = 25;
+  const [filteredResponse, error] = await tryCatch(getExpenseData({ param, searchParam }));
 
-  const { records, totalPages } = await getExpensesByMonth(year, month, page, limit);
+  if (error) {
+    logger.error(`Expense page failed: ${getErrorMessage(error)}`);
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
+        <AlertTriangle className="h-10 w-10 text-red-500" />
+        <h2 className="text-xl font-semibold">Something went wrong</h2>
+        <p className="text-muted-foreground max-w-md">
+          Failed to load expense data. Please try again later.
+        </p>
+      </div>
+    );
+  }
+
+  const {
+    year,
+    month,
+    records,
+    totalPages,
+    page,
+    expenseTypes,
+    paymentTypes,
+    expenseTypeFilter,
+    paymentTypeFilter,
+  } = filteredResponse;
 
   return (
     <div className="space-y-6">
-      <div className="my-2 flex justify-between">
-        <h2 className="text-2xl font-semibold">
-          Expenses for {format(new Date(year, month - 1), "MMMM yyyy")}
-        </h2>
-        <AddExpenseButton />
+      <div className="my-2 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <h2 className="text-2xl font-semibold">
+            {format(new Date(year, month - 1), "MMMM yyyy")}
+          </h2>
+          <FilterControls currentYear={year} currentMonth={month} />
+          <MultiSelectDropdown
+            label="Expense Type"
+            options={expenseTypes.map(({ name }) => name)}
+            selected={expenseTypeFilter}
+            queryKey="expenseType"
+          />
+
+          <MultiSelectDropdown
+            label="Payment Type"
+            options={paymentTypes.map(({ name }) => name)}
+            selected={paymentTypeFilter}
+            queryKey="paymentType"
+          />
+        </div>
+
+        <AddExpenseButton onLoadExpenseType={expenseTypes} onLoadPaymentType={paymentTypes} />
       </div>
 
-      {/* Table */}
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Short Name</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Expense Type</TableHead>
-            <TableHead>Payment Type</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {records.length > 0 ? (
-            records.map(expense => (
-              <TableRow key={expense.id}>
-                <TableCell>{format(new Date(expense.date), "dd MMM yyyy, hh:mm a")}</TableCell>
-                <TableCell>{expense.shortName}</TableCell>
-                <TableCell>{expense.description || "-"}</TableCell>
-                <TableCell>₹{expense.amount.toFixed(2)}</TableCell>
-                <TableCell>{expense.expenseType}</TableCell>
-                <TableCell>{expense.paymentType}</TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={6} className="py-4 text-center">
-                No expenses found
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <Pagination>
-          <PaginationContent>
-            {page > 1 && (
-              <PaginationItem>
-                <PaginationPrevious href={`/expenses/${year}/${month}?page=${page - 1}`} />
-              </PaginationItem>
-            )}
-
-            {Array.from({ length: totalPages }, (_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink
-                  href={`/expenses/${year}/${month}?page=${i + 1}`}
-                  isActive={i + 1 === page}
-                >
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-
-            {page < totalPages && (
-              <PaginationItem>
-                <PaginationNext href={`/expenses/${year}/${month}?page=${page + 1}`} />
-              </PaginationItem>
-            )}
-          </PaginationContent>
-        </Pagination>
-      )}
+      <ExpenseContent
+        records={records}
+        totalPages={totalPages}
+        page={page}
+        year={year}
+        month={month}
+        expenseTypeFilter={expenseTypeFilter}
+        paymentTypeFilter={paymentTypeFilter}
+      />
     </div>
   );
 }
