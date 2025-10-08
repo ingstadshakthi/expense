@@ -35,7 +35,7 @@ export default function RootLayout({
           <LoaderProvider>
             <AlertDialogProvider>
               <Header />
-              <main className="mx-auto px-4 max-w-7xl xl:px-0">{children}</main>
+              <main className="mx-auto max-w-7xl px-4 xl:px-0">{children}</main>
             </AlertDialogProvider>
           </LoaderProvider>
         </ThemeProvider>

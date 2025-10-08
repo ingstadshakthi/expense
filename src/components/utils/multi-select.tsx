@@ -48,6 +48,7 @@ export function MultiSelectDropdown({ label, options, selected, queryKey }: Prop
 
     startTransition(() => {
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      setOpen(false);
     });
   }
 
