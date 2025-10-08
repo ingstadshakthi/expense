@@ -1,6 +1,11 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+# Husky v10 compatible pre-commit
 
+# Run lint-staged for staged files
 npx lint-staged
-npx run lint
+
+# Run full lint check
+npm run lint
+
+# Build the project to catch any build errors
 npm run build
