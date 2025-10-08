@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ReactNode } from "react";
 
 type AsideProps = React.ComponentPropsWithoutRef<"aside"> & {
