@@ -15,51 +15,52 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: {
-    default: "ExpenseWise — Smart Expense Tracking",
-    template: "%s | ExpenseWise",
+    default: "Expensa — Smart Expense Tracking",
+    template: "%s | Expensa",
   },
   description:
-    "ExpenseWise helps you track, categorize, and analyze your daily expenses with insightful charts and smart recommendations.",
+    "Expensa helps you track, categorize, and analyze your daily expenses with insightful charts and smart recommendations.",
 
   keywords: [
     "expense tracker",
     "budget management",
     "personal finance",
     "money tracking",
-    "ExpenseWise",
+    "Expensa",
   ],
 
-  authors: [{ name: "ExpenseWise Team", url: "https://expensewise.in" }],
-  creator: "ExpenseWise",
-  publisher: "ExpenseWise",
+  authors: [{ name: "Expensa Team", url: "https://www.expensa.in/" }],
+  creator: "Expensa",
+  publisher: "Expensa",
 
-  metadataBase: new URL("https://expensewise.in"),
+  metadataBase: new URL("https://www.expensa.in/"),
 
   openGraph: {
-    title: "ExpenseWise — Smart Expense Tracking",
+    title: "Expensa — Smart Expense Tracking",
     description:
-      "Track your expenses smartly and efficiently with ExpenseWise. Simple UI, insightful charts, and smart budgeting tools.",
-    url: "https://expensewise.in",
-    siteName: "ExpenseWise",
+      "Track your expenses smartly and efficiently with Expensa. Simple UI, insightful charts, and smart budgeting tools.",
+    url: "https://www.expensa.in/",
+    siteName: "Expensa",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "https://expensewise.app/logo.png",
+        url: "https://www.expensa.in/logo.png",
         width: 1200,
         height: 630,
-        alt: "ExpenseWise App — Track your expenses smartly",
+        alt: "Expensa — Smart Expense Tracking App",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    site: "@ExpenseWiseApp",
-    creator: "@ExpenseWiseApp",
-    title: "ExpenseWise — Smart Expense Tracking",
-    description: "Track, categorize, and analyze your expenses with ExpenseWise.",
-    images: ["https://expensewise.app/twitter-image.png"],
+    site: "@ExpensaApp",
+    creator: "@ExpensaApp",
+    title: "Expensa — Smart Expense Tracking",
+    description:
+      "Track, categorize, and analyze your expenses with Expensa.",
+    images: ["https://www.expensa.in/twitter-image.png"],
   },
 
   icons: {
@@ -86,12 +87,13 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: "https://expensewise.in",
+    canonical: "https://www.expensa.in/",
   },
 
   category: "Finance",
-  applicationName: "ExpenseWise",
+  applicationName: "Expensa",
 };
+
 
 export default function RootLayout({
   children,

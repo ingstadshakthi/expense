@@ -16,7 +16,7 @@ export async function Header() {
           className="text-primary font-bol flex items-end justify-center gap-[1] text-xl"
         >
           <Image src="/logo.png" alt="Expense Logo" width={32} height={32} priority />
-          <span className="font-bold">xpense</span>
+          <span className="font-bold">xpensa</span>
         </Link>
 
         <div className="flex items-center space-x-4">
