@@ -1,10 +1,35 @@
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
+import withPWA from "next-pwa";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const plugins = [
+  bundleAnalyzer({
+    enabled: process.env.ANALYZE === "true",
+  }),
+  withPWA({
+    dest: "public",
+    register: true,
+    skipWaiting: true,
+    disable: process.env.NODE_ENV === "development",
+  }),
+];
+
+const baseConfig: NextConfig = {
   images: {
-    remotePatterns: [new URL("https://lh3.googleusercontent.com/a/**")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/a/**",
+      },
+    ],
   },
+  poweredByHeader: false,
 };
 
-export default nextConfig;
+const withPlugins = (
+  plugins: Array<(config: NextConfig) => NextConfig>,
+  config: NextConfig
+): NextConfig => plugins.reduce((acc, plugin) => plugin(acc), { ...config });
+
+export default withPlugins(plugins, baseConfig);

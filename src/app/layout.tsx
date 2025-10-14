@@ -58,8 +58,7 @@ export const metadata: Metadata = {
     site: "@ExpensaApp",
     creator: "@ExpensaApp",
     title: "Expensa — Smart Expense Tracking",
-    description:
-      "Track, categorize, and analyze your expenses with Expensa.",
+    description: "Track, categorize, and analyze your expenses with Expensa.",
     images: ["https://www.expensa.in/twitter-image.png"],
   },
 
@@ -94,7 +93,6 @@ export const metadata: Metadata = {
   applicationName: "Expensa",
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -102,6 +100,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      </head>
       <body className={`${roboto.className} antialiased`}>
         <Toaster position="top-right" richColors closeButton />
         <ThemeProvider
