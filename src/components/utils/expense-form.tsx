@@ -12,9 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
 import { toast } from "sonner";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 
 const Dialog = dynamic(() => import("@/components/ui/dialog").then(m => m.Dialog));
 const DialogContent = dynamic(() => import("@/components/ui/dialog").then(m => m.DialogContent));
@@ -163,16 +164,26 @@ export function ExpenseFormDialog({
             />
           </div>
 
+          {/* Date */}
           <div className="flex flex-col gap-2">
-            <Label>Date & Time</Label>
-            <DatePicker
-              id="date"
-              selected={date}
-              onChange={date => (date ? setDate(date) : setDate(new Date()))}
-              maxDate={new Date()}
-              className="w-full rounded-md border px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-              dateFormat="MMMM d, yyyy"
-            />
+            <Label>Date</Label>
+            <Select>
+              <SelectTrigger className="[&>svg:last-child]:hidden">
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {format(date, "MMMM d, yyyy")}
+              </SelectTrigger>
+              <SelectContent>
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={(selectedDate: Date | undefined) => {
+                    selectedDate && setDate(selectedDate);
+                  }}
+                  disabled={(date: Date) => date > new Date()}
+                  required
+                />
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Expense Type */}
