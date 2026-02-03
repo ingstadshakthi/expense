@@ -1,4 +1,5 @@
 import { getUser } from "@/controllers/user";
+import { ProfileClient } from "./client";
 
 export default async function ProfilePage() {
   const user = await getUser();
@@ -6,17 +7,17 @@ export default async function ProfilePage() {
     return <div className="p-6 text-center">Unauthorized</div>;
   }
 
-  // const [expenseTypes, paymentMethods] = await Promise.all([
-  //   getExpense(user.id),
-  //   getPayment(user.id),
-  // ]);
-
   return (
-    <main className="mx-auto max-7xl">
-      {/* <ProfileClient
-        expenseTypes={expenseTypes}
-        paymentMethods={paymentMethods}
-      /> */}
+    <main>
+      <ProfileClient
+        user={{
+          id: user._id?.toString(),
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          budget: user.budget,
+        }}
+      />
     </main>
   );
 }

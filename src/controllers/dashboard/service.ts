@@ -35,6 +35,10 @@ export interface DashboardStats {
   highestExpense: { name: string; amount: number; category: string; date: Date } | null;
   highestSpendingDay: { date: Date; amount: number; count: number } | null;
   averageExpense: number;
+  budget: number;
+  budgetUsed: number;
+  budgetRemaining: number;
+  budgetPercentage: number;
 }
 
 export async function getDashboardData(): Promise<DashboardStats | null> {
@@ -168,6 +172,12 @@ export async function getDashboardData(): Promise<DashboardStats | null> {
 
     const monthLabel = now.toLocaleString("default", { month: "long" });
 
+    // Calculate budget status
+    const budget = user.budget || 0;
+    const budgetUsed = currentMonthTotal;
+    const budgetRemaining = Math.max(0, budget - budgetUsed);
+    const budgetPercentage = budget > 0 ? (budgetUsed / budget) * 100 : 0;
+
     return {
       currentMonthTotal,
       lastMonthTotal,
@@ -180,6 +190,10 @@ export async function getDashboardData(): Promise<DashboardStats | null> {
       highestExpense,
       highestSpendingDay,
       averageExpense,
+      budget,
+      budgetUsed,
+      budgetRemaining,
+      budgetPercentage,
     };
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
