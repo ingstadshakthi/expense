@@ -56,7 +56,7 @@ export const ExpenseDB = {
     const skip = (page - 1) * limit;
 
     const records = await Expense.find(query)
-      .populate("expenseType", "name")
+      .populate("expenseType", "_id name color")
       .populate("paymentType", "name")
       .sort({ date: -1 })
       .skip(skip)
