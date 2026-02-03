@@ -116,9 +116,21 @@ export async function getDashboardData(): Promise<DashboardStats | null> {
         };
       });
 
-    // Calculate daily average
-    const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-    const dailyAverage = currentMonthTotal / daysInMonth;
+    // Build daily spending map (for average and highest spending day)
+    const daySpendingMap = new Map<string, { amount: number; count: number }>();
+    currentMonthData.records.forEach(expense => {
+      const dateKey = new Date(expense.date).toDateString();
+      const existing = daySpendingMap.get(dateKey) || { amount: 0, count: 0 };
+      daySpendingMap.set(dateKey, {
+        amount: existing.amount + expense.amount,
+        count: existing.count + 1,
+      });
+    });
+
+    // Calculate daily average (based on days with expenses, not total days in month)
+    const uniqueDaysWithExpenses = daySpendingMap.size;
+    const dailyAverage =
+      uniqueDaysWithExpenses > 0 ? currentMonthTotal / uniqueDaysWithExpenses : 0;
     const averageExpense =
       currentMonthData.records.length > 0 ? currentMonthTotal / currentMonthData.records.length : 0;
 
@@ -138,17 +150,6 @@ export async function getDashboardData(): Promise<DashboardStats | null> {
             };
           })()
         : null;
-
-    // Find highest spending day
-    const daySpendingMap = new Map<string, { amount: number; count: number }>();
-    currentMonthData.records.forEach(expense => {
-      const dateKey = new Date(expense.date).toDateString();
-      const existing = daySpendingMap.get(dateKey) || { amount: 0, count: 0 };
-      daySpendingMap.set(dateKey, {
-        amount: existing.amount + expense.amount,
-        count: existing.count + 1,
-      });
-    });
 
     let highestSpendingDay: { date: Date; amount: number; count: number } | null = null;
     if (daySpendingMap.size > 0) {
