@@ -40,7 +40,7 @@ export default async function Dashboard() {
     <div className="mt-4 space-y-6">
       {/* Header with Actions */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-4xl font-bold">Dashboard</h1>
         <div className="flex gap-2">
           <ClientLink href={`/expenses/${year}/${month}`}>
             <Button variant="outline">View All</Button>
@@ -57,24 +57,24 @@ export default async function Dashboard() {
           <div className="relative p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-muted-foreground text-sm font-medium">
+                <p className="text-muted-foreground text-xs font-medium">
                   {stats.monthLabel} Spent
                 </p>
-                <p className="mt-2 text-3xl font-bold">₹{stats.currentMonthTotal.toFixed(0)}</p>
+                <p className="mt-2 text-4xl font-bold">₹{stats.currentMonthTotal.toFixed(0)}</p>
               </div>
             </div>
             <div className="mt-3 flex items-center gap-1">
               {isIncreased ? (
                 <>
                   <TrendingUp className="h-4 w-4 text-red-500" />
-                  <p className="text-xs font-semibold text-red-600 dark:text-red-400">
+                  <p className="text-sm font-semibold text-red-600 dark:text-red-400">
                     {Math.abs(percentageChange).toFixed(1)}% vs last month
                   </p>
                 </>
               ) : (
                 <>
                   <TrendingDown className="h-4 w-4 text-green-500" />
-                  <p className="text-xs font-semibold text-green-600 dark:text-green-400">
+                  <p className="text-sm font-semibold text-green-600 dark:text-green-400">
                     {Math.abs(percentageChange).toFixed(1)}% vs last month
                   </p>
                 </>
@@ -89,8 +89,8 @@ export default async function Dashboard() {
           <div className="relative p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-muted-foreground text-sm font-medium">Daily Average</p>
-                <p className="mt-2 text-3xl font-bold">₹{stats.dailyAverage.toFixed(0)}</p>
+                <p className="text-muted-foreground text-xs font-medium">Daily Average</p>
+                <p className="mt-2 text-4xl font-bold">₹{stats.dailyAverage.toFixed(0)}</p>
               </div>
             </div>
             <p className="text-muted-foreground mt-3 text-xs">Per day in {stats.monthLabel}</p>
@@ -103,8 +103,8 @@ export default async function Dashboard() {
           <div className="relative p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-muted-foreground text-sm font-medium">Avg Expense</p>
-                <p className="mt-2 text-3xl font-bold">₹{stats.averageExpense.toFixed(0)}</p>
+                <p className="text-muted-foreground text-xs font-medium">Avg Expense</p>
+                <p className="mt-2 text-4xl font-bold">₹{stats.averageExpense.toFixed(0)}</p>
               </div>
             </div>
             <p className="text-muted-foreground mt-3 text-xs">
@@ -119,8 +119,8 @@ export default async function Dashboard() {
           <div className="relative p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-muted-foreground text-sm font-medium">Highest Expense</p>
-                <p className="mt-2 text-3xl font-bold">
+                <p className="text-muted-foreground text-xs font-medium">Highest Expense</p>
+                <p className="mt-2 text-4xl font-bold">
                   ₹{stats.highestExpense?.amount.toFixed(0) || "0"}
                 </p>
               </div>
@@ -141,10 +141,10 @@ export default async function Dashboard() {
             <div className="flex items-center gap-3">
               <Zap className="h-5 w-5 text-amber-600 dark:text-amber-400" />
               <div>
-                <p className="font-semibold text-amber-900 dark:text-amber-100">
+                <p className="text-lg font-semibold text-amber-900 dark:text-amber-100">
                   Highest Spending Day
                 </p>
-                <p className="text-sm text-amber-800 dark:text-amber-200">
+                <p className="mt-1 text-base text-amber-800 dark:text-amber-200">
                   {format(stats.highestSpendingDay.date, "MMMM d, yyyy")} • ₹
                   {stats.highestSpendingDay.amount.toFixed(0)} ({stats.highestSpendingDay.count}{" "}
                   transaction{stats.highestSpendingDay.count !== 1 ? "s" : ""})
@@ -170,8 +170,8 @@ export default async function Dashboard() {
             <div className="space-y-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium">Monthly Budget</p>
-                  <p className="mt-2 text-2xl font-bold">₹{stats.budget.toLocaleString("en-IN")}</p>
+                  <p className="text-xs font-medium">Monthly Budget</p>
+                  <p className="mt-2 text-3xl font-bold">₹{stats.budget.toLocaleString("en-IN")}</p>
                 </div>
                 <div className="text-right">
                   <p
@@ -211,12 +211,14 @@ export default async function Dashboard() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-muted/50 rounded-lg p-3">
                   <p className="text-muted-foreground text-xs">Spent</p>
-                  <p className="mt-1 font-semibold">₹{stats.budgetUsed.toLocaleString("en-IN")}</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    ₹{stats.budgetUsed.toLocaleString("en-IN")}
+                  </p>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-3">
                   <p className="text-muted-foreground text-xs">Remaining</p>
                   <p
-                    className={`mt-1 font-semibold ${
+                    className={`mt-1 text-lg font-semibold ${
                       stats.budgetRemaining <= 0
                         ? "text-red-600 dark:text-red-400"
                         : "text-green-600 dark:text-green-400"
@@ -255,7 +257,7 @@ export default async function Dashboard() {
         {/* Spending by Category - 2 columns with colored bars */}
         <Card className="lg:col-span-2">
           <div className="p-6">
-            <h2 className="text-lg font-semibold">Spending by Category</h2>
+            <h2 className="text-2xl font-semibold">Spending by Category</h2>
             <div className="mt-6 space-y-5">
               {stats.categoryBreakdown.length === 0 ? (
                 <p className="text-muted-foreground py-8 text-center text-sm">No spending data</p>
@@ -268,9 +270,9 @@ export default async function Dashboard() {
                           className="h-3 w-3 rounded-full"
                           style={{ backgroundColor: category.color }}
                         ></div>
-                        <span className="text-sm font-medium">{category.name}</span>
+                        <span className="text-base font-medium">{category.name}</span>
                       </div>
-                      <span className="text-sm font-semibold">₹{category.amount.toFixed(0)}</span>
+                      <span className="text-base font-semibold">₹{category.amount.toFixed(0)}</span>
                     </div>
                     <div className="bg-muted h-2 w-full overflow-hidden rounded-full">
                       <div
@@ -297,7 +299,7 @@ export default async function Dashboard() {
         <div className="space-y-4">
           <Card>
             <div className="p-6">
-              <h3 className="mb-4 font-semibold">Top Categories</h3>
+              <h3 className="mb-4 text-2xl font-semibold">Top Categories</h3>
               <div className="space-y-3">
                 {stats.topCategories.length === 0 ? (
                   <p className="text-muted-foreground py-4 text-center text-sm">No data</p>
@@ -309,8 +311,8 @@ export default async function Dashboard() {
                           {index + 1}
                         </Badge>
                         <div>
-                          <p className="text-sm font-medium">{category.name}</p>
-                          <p className="text-muted-foreground text-xs">
+                          <p className="text-base font-medium">{category.name}</p>
+                          <p className="text-muted-foreground text-sm">
                             ₹{category.amount.toFixed(0)}
                           </p>
                         </div>
@@ -331,13 +333,13 @@ export default async function Dashboard() {
                     <p className="text-xs font-semibold text-red-900 dark:text-red-100">
                       TOP EXPENSE
                     </p>
-                    <p className="mt-1 text-sm font-semibold text-red-900 dark:text-red-100">
+                    <p className="mt-1 text-lg font-semibold text-red-900 dark:text-red-100">
                       ₹{stats.highestExpense.amount.toFixed(0)}
                     </p>
-                    <p className="text-muted-foreground mt-1 truncate text-xs">
+                    <p className="text-muted-foreground mt-1 truncate text-sm">
                       {stats.highestExpense.name}
                     </p>
-                    <p className="text-muted-foreground text-xs">{stats.highestExpense.category}</p>
+                    <p className="text-muted-foreground text-sm">{stats.highestExpense.category}</p>
                   </div>
                 </div>
               </div>
@@ -349,7 +351,7 @@ export default async function Dashboard() {
       {/* Recent Expenses Table */}
       <Card>
         <div className="p-6">
-          <h2 className="mb-4 text-lg font-semibold">Recent Expenses</h2>
+          <h2 className="mb-4 text-2xl font-semibold">Recent Expenses</h2>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -370,11 +372,11 @@ export default async function Dashboard() {
                 ) : (
                   stats.recentExpenses.map(expense => (
                     <TableRow key={expense.id}>
-                      <TableCell className="font-medium">{expense.shortName}</TableCell>
+                      <TableCell className="text-base font-medium">{expense.shortName}</TableCell>
                       <TableCell>
                         <Badge
                           variant="outline"
-                          className="border-transparent"
+                          className="border-transparent text-sm"
                           style={{
                             backgroundColor: expense.categoryColor + "20",
                             color: expense.categoryColor,
@@ -383,10 +385,10 @@ export default async function Dashboard() {
                           {expense.categoryName}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
+                      <TableCell className="text-muted-foreground text-base">
                         {format(new Date(expense.date), "MMM d, yyyy")}
                       </TableCell>
-                      <TableCell className="text-right font-semibold">
+                      <TableCell className="text-right text-base font-semibold">
                         ₹{expense.amount.toFixed(0)}
                       </TableCell>
                     </TableRow>
