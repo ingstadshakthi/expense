@@ -15,7 +15,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 
 const Dialog = dynamic(() => import("@/components/ui/dialog").then(m => m.Dialog));
 const DialogContent = dynamic(() => import("@/components/ui/dialog").then(m => m.DialogContent));
@@ -50,6 +50,7 @@ interface Props {
   paymentTypes: PaymentType[];
   initialData?: ExpenseData;
   onSubmit: (data: ExpenseData) => Promise<void>;
+  isSubmitting?: boolean;
 }
 
 export function ExpenseFormDialog({
@@ -59,11 +60,13 @@ export function ExpenseFormDialog({
   paymentTypes,
   initialData,
   onSubmit,
+  isSubmitting = false,
 }: Props) {
   const [shortName, setShortName] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [expenseType, setExpenseType] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [paymentType, setPaymentType] = useState("");
   const [date, setDate] = useState<Date>(new Date());
 
@@ -88,6 +91,8 @@ export function ExpenseFormDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (submitting || isSubmitting) return; // Prevent double submission
+
     if (!shortName.trim()) {
       toast.error("Short name is required");
       return;
@@ -109,17 +114,20 @@ export function ExpenseFormDialog({
       return;
     }
 
-    await onSubmit({
-      id: initialData?.id,
-      shortName,
-      description: description.trim() || undefined,
-      amount: Number(amount),
-      expenseType,
-      paymentType,
-      date,
-    });
-
-    onOpenChange(false);
+    setSubmitting(true);
+    try {
+      await onSubmit({
+        id: initialData?.id,
+        shortName,
+        description: description.trim() || undefined,
+        amount: Number(amount),
+        expenseType,
+        paymentType,
+        date,
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -177,7 +185,7 @@ export function ExpenseFormDialog({
                   mode="single"
                   selected={date}
                   onSelect={(selectedDate: Date | undefined) => {
-                    selectedDate && setDate(selectedDate);
+                    if (selectedDate) setDate(selectedDate);
                   }}
                   disabled={(date: Date) => date > new Date()}
                   required
@@ -221,7 +229,18 @@ export function ExpenseFormDialog({
           </div>
 
           <DialogFooter>
-            <Button type="submit">{initialData ? "Update Expense" : "Add Expense"}</Button>
+            <Button type="submit" disabled={submitting || isSubmitting} className="gap-2">
+              {submitting || isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : initialData ? (
+                "Update Expense"
+              ) : (
+                "Add Expense"
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
