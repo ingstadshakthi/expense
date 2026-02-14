@@ -38,7 +38,7 @@ export function UserAccount({ session }: Props) {
         <h3 className="flex items-center gap-1 md:gap-2">
           <Image
             src={session.user.image}
-            className="h-8"
+            className="h-8 rounded-full"
             alt="Profile Image"
             width={32}
             height={32}

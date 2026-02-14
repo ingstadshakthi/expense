@@ -39,8 +39,7 @@ export default async function Dashboard() {
   return (
     <div className="mt-4 space-y-6">
       {/* Header with Actions */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold">Dashboard</h1>
+      <div className="flex items-center justify-end">
         <div className="flex gap-2">
           <ClientLink href={`/expenses/${year}/${month}`}>
             <Button variant="outline">View All</Button>
