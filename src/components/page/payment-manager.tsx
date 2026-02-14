@@ -88,14 +88,14 @@ export function PaymentManager({ paymentTypes }: Props) {
             role="listitem"
             key={pay.id}
             style={{ backgroundColor: pay.color }}
-            className="flex items-center rounded-full px-3 py-1"
+            className="flex items-center px-3 py-1"
           >
             {/* Edit Button */}
             <button
               type="button"
               onClick={() => handleEdit(pay)}
               aria-label={`Edit payment type ${pay.name}`}
-              className="flex cursor-pointer items-center rounded-full px-2 py-1 focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0 focus-visible:outline-none"
+              className="flex cursor-pointer items-center px-2 py-1 focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0 focus-visible:outline-none"
             >
               <span className="text-white">{pay.name}</span>
             </button>
@@ -105,7 +105,7 @@ export function PaymentManager({ paymentTypes }: Props) {
               type="button"
               onClick={() => handleDelete(pay.id)}
               aria-label={`Delete payment type ${pay.name}`}
-              className="ml-1 rounded-full p-1 text-white hover:text-red-200 focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-0 focus-visible:outline-none"
+              className="ml-1 p-1 text-white hover:text-red-200 focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-0 focus-visible:outline-none"
             >
               <X size={16} />
             </button>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,12 +15,13 @@ import { Calendar } from "@/components/ui/calendar";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
-
-const Dialog = dynamic(() => import("@/components/ui/dialog").then(m => m.Dialog));
-const DialogContent = dynamic(() => import("@/components/ui/dialog").then(m => m.DialogContent));
-const DialogHeader = dynamic(() => import("@/components/ui/dialog").then(m => m.DialogHeader));
-const DialogTitle = dynamic(() => import("@/components/ui/dialog").then(m => m.DialogTitle));
-const DialogFooter = dynamic(() => import("@/components/ui/dialog").then(m => m.DialogFooter));
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface ExpenseType {
   id: string;

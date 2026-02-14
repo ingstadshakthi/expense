@@ -80,6 +80,8 @@ export default async function ExpensesPage({ params, searchParams }: Props) {
         month={month}
         expenseTypeFilter={expenseTypeFilter}
         paymentTypeFilter={paymentTypeFilter}
+        expenseTypes={expenseTypes}
+        paymentTypes={paymentTypes}
       />
     </div>
   );

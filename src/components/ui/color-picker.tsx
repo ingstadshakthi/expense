@@ -41,12 +41,8 @@ export function ColorPicker({ value, onChange, colors }: Props) {
   ];
 
   return (
-    <div
-      className="flex flex-wrap gap-2"
-      role="radiogroup"
-      aria-label="Pick a color"
-    >
-      {defaultColors.map((color) => (
+    <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Pick a color">
+      {defaultColors.map(color => (
         <button
           key={color}
           type="button"
@@ -54,10 +50,8 @@ export function ColorPicker({ value, onChange, colors }: Props) {
           aria-checked={value === color}
           aria-label={`Color ${color}`}
           onClick={() => onChange(color)}
-          className={`w-8 h-8 rounded-full border-2 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-            value === color
-              ? "border-black dark:border-white"
-              : "border-transparent"
+          className={`h-8 w-8 border-2 focus:ring-2 focus:ring-offset-2 focus:outline-none ${
+            value === color ? "border-black dark:border-white" : "border-transparent"
           }`}
           style={{ backgroundColor: color }}
         />

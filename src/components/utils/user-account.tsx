@@ -22,10 +22,7 @@ export function UserAccount({ session }: Props) {
 
   if (!session?.user?.image) {
     return (
-      <Link
-        href="/login"
-        className="text-sm font-medium transition-colors hover:text-primary"
-      >
+      <Link href="/login" className="hover:text-primary text-sm font-medium transition-colors">
         Signin
       </Link>
     );
@@ -41,7 +38,7 @@ export function UserAccount({ session }: Props) {
         <h3 className="flex items-center gap-1 md:gap-2">
           <Image
             src={session.user.image}
-            className="h-8 rounded-full"
+            className="h-8"
             alt="Profile Image"
             width={32}
             height={32}
@@ -50,10 +47,7 @@ export function UserAccount({ session }: Props) {
         </h3>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          onClick={redirectToProfile}
-          className="cursor-pointer"
-        >
+        <DropdownMenuItem onClick={redirectToProfile} className="cursor-pointer">
           Profile
         </DropdownMenuItem>
         <DropdownMenuItem onClick={signOutAction} className="cursor-pointer">

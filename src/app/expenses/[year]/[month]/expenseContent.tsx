@@ -1,4 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import { format } from "date-fns";
+import { Edit2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   Table,
   TableBody,
@@ -15,7 +20,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
+import { ExpenseFormDialog } from "@/components/utils/expense-form";
 import { ExpenseDTO } from "@/controllers/expense/service";
+import { ExpenseData } from "@/types/expense";
+import { onExpenseDelete, onExpenseUpdate } from "@/controllers/expense/action";
+import { useAlertDialog } from "@/hooks/alert-dialog";
+import { useLoader } from "@/components/providers/loader-provider";
 
 interface Props {
   page: number;
@@ -25,10 +36,27 @@ interface Props {
   records: ExpenseDTO[];
   expenseTypeFilter: string[];
   paymentTypeFilter: string[];
+  expenseTypes?: Array<{ id: string; name: string }>;
+  paymentTypes?: Array<{ id: string; name: string }>;
 }
 
 export function ExpenseContent(props: Props) {
-  const { records, totalPages, page, year, month, expenseTypeFilter, paymentTypeFilter } = props;
+  const {
+    records,
+    totalPages,
+    page,
+    year,
+    month,
+    expenseTypeFilter,
+    paymentTypeFilter,
+    expenseTypes = [],
+    paymentTypes = [],
+  } = props;
+  const [editingExpense, setEditingExpense] = useState<ExpenseDTO | null>(null);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { openAlert } = useAlertDialog();
+  const { showLoader, hideLoader } = useLoader();
 
   const buildHref = (pageNum: number) => {
     const params = new URLSearchParams();
@@ -45,6 +73,52 @@ export function ExpenseContent(props: Props) {
     return `/expenses/${year}/${month}?${params.toString()}`;
   };
 
+  const handleEdit = (expense: ExpenseDTO) => {
+    setEditingExpense(expense);
+    setIsEditOpen(true);
+  };
+
+  const handleDelete = (expense: ExpenseDTO) => {
+    async function onConfirm() {
+      showLoader();
+      try {
+        const { success, message } = await onExpenseDelete(expense.id);
+        if (success) {
+          toast.success(message);
+        } else {
+          toast.error(message);
+        }
+      } finally {
+        hideLoader();
+      }
+    }
+
+    openAlert({
+      title: "Delete Expense",
+      message: `Are you sure you want to delete "${expense.shortName}"? This action cannot be undone.`,
+      onConfirm,
+      onCancel: () => console.log("Delete cancelled"),
+    });
+  };
+
+  const handleEditSubmit = async (data: ExpenseData) => {
+    if (!editingExpense) return;
+
+    setIsSubmitting(true);
+    try {
+      const { success, message } = await onExpenseUpdate(editingExpense.id, data);
+      if (success) {
+        toast.success(message);
+        setIsEditOpen(false);
+        setEditingExpense(null);
+      } else {
+        toast.error(message);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <Table>
@@ -56,6 +130,7 @@ export function ExpenseContent(props: Props) {
             <TableHead>Amount</TableHead>
             <TableHead>Expense Type</TableHead>
             <TableHead>Payment Type</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -66,19 +141,64 @@ export function ExpenseContent(props: Props) {
                 <TableCell>{expense.shortName}</TableCell>
                 <TableCell>{expense.description || "-"}</TableCell>
                 <TableCell>₹{expense.amount.toFixed(2)}</TableCell>
-                <TableCell>{expense.expenseType}</TableCell>
+                <TableCell>
+                  {expenseTypes.find(t => t.id === expense.expenseType)?.name ||
+                    expense.expenseType}
+                </TableCell>
                 <TableCell>{expense.paymentType}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEdit(expense)}
+                      aria-label={`Edit expense ${expense.shortName}`}
+                      title="Edit expense"
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDelete(expense)}
+                      aria-label={`Delete expense ${expense.shortName}`}
+                      title="Delete expense"
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </div>
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={6} className="py-4 text-center">
+              <TableCell colSpan={7} className="py-4 text-center">
                 No matching records found 😢
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
+
+      {editingExpense && (
+        <ExpenseFormDialog
+          open={isEditOpen}
+          onOpenChange={setIsEditOpen}
+          initialData={{
+            id: editingExpense.id,
+            shortName: editingExpense.shortName,
+            description: editingExpense.description,
+            amount: editingExpense.amount,
+            expenseType: editingExpense.expenseType,
+            paymentType: paymentTypes.find(p => p.name === editingExpense.paymentType)?.id || "",
+            date: new Date(editingExpense.date),
+          }}
+          expenseTypes={expenseTypes}
+          paymentTypes={paymentTypes}
+          onSubmit={handleEditSubmit}
+          isSubmitting={isSubmitting}
+        />
+      )}
 
       {/* Pagination */}
       {totalPages > 1 && (

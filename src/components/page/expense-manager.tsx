@@ -7,10 +7,7 @@ import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { ColorPicker } from "@/components/ui/color-picker";
-import {
-  onExpenseTypeDelete,
-  onExpenseTypeUpsert,
-} from "@/controllers/profile/action";
+import { onExpenseTypeDelete, onExpenseTypeUpsert } from "@/controllers/profile/action";
 import { useAlertDialog } from "@/hooks/alert-dialog";
 import { useLoader } from "../providers/loader-provider";
 import { logger } from "@/lib/logger";
@@ -33,10 +30,7 @@ export function ExpenseManager({ expenseTypes }: Props) {
     if (selected) {
       async function onConfirm() {
         showLoader();
-        const { success, message } = await onExpenseTypeUpsert(
-          { name, color },
-          selected,
-        );
+        const { success, message } = await onExpenseTypeUpsert({ name, color }, selected);
         logger.info(message);
         if (success) {
           toast(message);
@@ -87,21 +81,21 @@ export function ExpenseManager({ expenseTypes }: Props) {
   };
 
   return (
-    <div className="max-w-lg mt-20 mx-auto px-4">
-      <div className="flex flex-wrap gap-3 mb-4" role="list">
-        {expenseTypes.map((exp) => (
+    <div className="mx-auto mt-20 max-w-lg px-4">
+      <div className="mb-4 flex flex-wrap gap-3" role="list">
+        {expenseTypes.map(exp => (
           <div
             role="listitem"
             key={exp.id}
             style={{ backgroundColor: exp.color }}
-            className="flex items-center px-3 py-1 rounded-full"
+            className="flex items-center px-3 py-1"
           >
             {/* Edit Button */}
             <button
               type="button"
               onClick={() => handleEdit(exp)}
               aria-label={`Edit expense type ${exp.name}`}
-              className="flex items-center rounded-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0 px-2 py-1 focus:ring-offset-1"
+              className="flex cursor-pointer items-center px-2 py-1 focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0 focus-visible:outline-none"
             >
               <span className="text-white">{exp.name}</span>
             </button>
@@ -111,7 +105,7 @@ export function ExpenseManager({ expenseTypes }: Props) {
               type="button"
               onClick={() => handleDelete(exp.id)}
               aria-label={`Delete expense type ${exp.name}`}
-              className="ml-1 text-white hover:text-red-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-0 rounded-full p-1 focus:ring-offset-1"
+              className="ml-1 p-1 text-white hover:text-red-200 focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-0 focus-visible:outline-none"
             >
               <X size={16} />
             </button>
@@ -119,10 +113,10 @@ export function ExpenseManager({ expenseTypes }: Props) {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-10">
+      <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-4">
         <div className="flex flex-col gap-6">
           <Label>Name</Label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} />
+          <Input value={name} onChange={e => setName(e.target.value)} />
         </div>
 
         <div className="flex flex-col gap-2">

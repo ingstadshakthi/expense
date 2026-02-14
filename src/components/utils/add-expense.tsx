@@ -2,14 +2,12 @@
 
 import { startTransition, useState } from "react";
 import { Button } from "@/components/ui/button";
-import dynamic from "next/dynamic";
+import { ExpenseFormDialog } from "./expense-form";
 import { onExpenseCreate } from "@/controllers/expense/action";
 import { ExpenseData } from "@/types/expense";
 import { toast } from "sonner";
 import { getUserExpensePaymentDetails } from "@/controllers/profile/action";
 import { Loader2 } from "lucide-react";
-
-const ExpenseFormDialog = dynamic(() => import("./expense-form").then(m => m.ExpenseFormDialog));
 
 interface ExpenseType {
   id: string;
