@@ -117,7 +117,7 @@ export default function RootLayout({
           <LoaderProvider>
             <AlertDialogProvider>
               <Header />
-              <main className="mx-auto max-w-7xl px-4 xl:px-0">{children}</main>
+              <main>{children}</main>
             </AlertDialogProvider>
           </LoaderProvider>
         </ThemeProvider>

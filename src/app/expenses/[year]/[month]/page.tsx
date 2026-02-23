@@ -47,7 +47,7 @@ export default async function ExpensesPage({ params, searchParams }: Props) {
   } = filteredResponse;
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto space-y-6 max-w-7xl px-4 xl:px-0">
       <div className="my-2 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4">
           <h2 className="text-2xl font-semibold">

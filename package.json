@@ -60,5 +60,13 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx,jsx}": "oxlint --fix"
-  }
+  },
+  "browserslist": [
+    ">0.5%",
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "not dead",
+    "not IE 11"
+  ]
 }

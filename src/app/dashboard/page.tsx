@@ -37,7 +37,7 @@ export default async function Dashboard() {
   const isIncreased = percentageChange > 0;
 
   return (
-    <div className="mt-4 space-y-6">
+    <div className="mx-auto mt-4 max-w-7xl space-y-6 px-4 xl:px-0">
       {/* Header with Actions */}
       <div className="flex items-center justify-end">
         <div className="flex gap-2">
@@ -157,13 +157,12 @@ export default async function Dashboard() {
       {/* Budget Widget */}
       {stats.budget > 0 && (
         <Card
-          className={`border-l-4 ${
-            stats.budgetPercentage > 100
+          className={`border-l-4 ${stats.budgetPercentage > 100
               ? "border-l-red-500 bg-red-50/50 dark:bg-red-950/20"
               : stats.budgetPercentage > 80
                 ? "border-l-amber-500 bg-amber-50/50 dark:bg-amber-950/20"
                 : "border-l-green-500 bg-green-50/50 dark:bg-green-950/20"
-          }`}
+            }`}
         >
           <div className="p-6">
             <div className="space-y-4">
@@ -174,13 +173,12 @@ export default async function Dashboard() {
                 </div>
                 <div className="text-right">
                   <p
-                    className={`text-2xl font-bold ${
-                      stats.budgetPercentage > 100
+                    className={`text-2xl font-bold ${stats.budgetPercentage > 100
                         ? "text-red-600 dark:text-red-400"
                         : stats.budgetPercentage > 80
                           ? "text-amber-600 dark:text-amber-400"
                           : "text-green-600 dark:text-green-400"
-                    }`}
+                      }`}
                   >
                     {stats.budgetPercentage.toFixed(1)}%
                   </p>
@@ -192,13 +190,12 @@ export default async function Dashboard() {
               <div className="space-y-2">
                 <div className="bg-muted h-3 w-full overflow-hidden rounded-full">
                   <div
-                    className={`h-full transition-all duration-500 ${
-                      stats.budgetPercentage > 100
+                    className={`h-full transition-all duration-500 ${stats.budgetPercentage > 100
                         ? "bg-red-500"
                         : stats.budgetPercentage > 80
                           ? "bg-amber-500"
                           : "bg-green-500"
-                    }`}
+                      }`}
                     style={{
                       width: `${Math.min(stats.budgetPercentage, 100)}%`,
                     }}
@@ -217,11 +214,10 @@ export default async function Dashboard() {
                 <div className="bg-muted/50 rounded-lg p-3">
                   <p className="text-muted-foreground text-xs">Remaining</p>
                   <p
-                    className={`mt-1 text-lg font-semibold ${
-                      stats.budgetRemaining <= 0
+                    className={`mt-1 text-lg font-semibold ${stats.budgetRemaining <= 0
                         ? "text-red-600 dark:text-red-400"
                         : "text-green-600 dark:text-green-400"
-                    }`}
+                      }`}
                   >
                     ₹{stats.budgetRemaining.toLocaleString("en-IN")}
                   </p>
