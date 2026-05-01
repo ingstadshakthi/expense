@@ -2,14 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, BookOpen } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 
-interface Props {
-  year: number;
-  month: number;
-}
-
-export default function HeaderNav({ year, month }: Props) {
+export default function HeaderNav() {
   const pathname = usePathname();
 
   const links = [
@@ -18,12 +13,6 @@ export default function HeaderNav({ year, month }: Props) {
       label: "Dashboard",
       icon: LayoutDashboard,
       active: pathname === "/dashboard" || pathname.startsWith("/dashboard"),
-    },
-    {
-      href: `/expenses/${year}/${month}`,
-      label: "Ledger",
-      icon: BookOpen,
-      active: pathname.startsWith("/expenses"),
     },
   ];
 
