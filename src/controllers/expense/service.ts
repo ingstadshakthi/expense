@@ -16,13 +16,6 @@ export interface ExpenseDTO {
   date: Date;
 }
 
-function extractName(data: unknown) {
-  if (typeof data === "object" && data && "name" in data) {
-    if (typeof data.name === "string") return data.name;
-  }
-  return "";
-}
-
 function extractDocId(data: unknown) {
   if (typeof data === "object" && data && "_id" in data) {
     if (data._id) return data._id.toString();
