@@ -5,7 +5,7 @@ export default async function ProfileExpensePage() {
   const paymentTypes = await getUserPaymentTypes();
 
   return (
-    <article className="max-7xl mx-auto">
+    <article>
       <PaymentManager paymentTypes={paymentTypes} />
     </article>
   );

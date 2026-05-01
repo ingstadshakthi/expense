@@ -1,13 +1,13 @@
 "use client";
 
-import { startTransition, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ExpenseFormDialog } from "./expense-form";
 import { onExpenseCreate } from "@/controllers/expense/action";
 import { ExpenseData } from "@/types/expense";
 import { toast } from "sonner";
 import { getUserExpensePaymentDetails } from "@/controllers/profile/action";
-import { Loader2 } from "lucide-react";
+import { Plus } from "lucide-react";
 
 interface ExpenseType {
   id: string;
@@ -26,28 +26,25 @@ interface Props {
 
 export function AddExpenseButton({ onLoadExpenseType = [], onLoadPaymentType = [] }: Props) {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingForm, setLoadingForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [expenseTypes, setExpenseTypes] = useState<ExpenseType[]>(onLoadExpenseType);
   const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>(onLoadPaymentType);
 
   async function onFormOpen() {
-    if (loading || submitting) return; // Prevent multiple clicks
+    if (submitting) return;
+    setOpen(true); // open immediately — no button loading state
 
-    setLoading(true);
-    setOpen(true);
-
-    startTransition(async () => {
+    if (onLoadExpenseType.length === 0 || onLoadPaymentType.length === 0) {
+      setLoadingForm(true);
       try {
-        if (onLoadExpenseType.length === 0 || onLoadPaymentType.length === 0) {
-          const [expense, payment] = await getUserExpensePaymentDetails();
-          setExpenseTypes(expense);
-          setPaymentTypes(payment);
-        }
+        const [expense, payment] = await getUserExpensePaymentDetails();
+        setExpenseTypes(expense);
+        setPaymentTypes(payment);
       } finally {
-        setLoading(false);
+        setLoadingForm(false);
       }
-    });
+    }
   }
 
   async function onAddExpense(data: ExpenseData) {
@@ -67,15 +64,13 @@ export function AddExpenseButton({ onLoadExpenseType = [], onLoadPaymentType = [
 
   return (
     <>
-      <Button onClick={onFormOpen} disabled={loading || submitting} className="gap-2">
-        {loading ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Loading...
-          </>
-        ) : (
-          "Add Expense"
-        )}
+      <Button
+        onClick={onFormOpen}
+        disabled={submitting}
+        className="gap-1.5 bg-primary font-semibold text-primary-foreground hover:bg-primary/90"
+      >
+        <Plus className="h-4 w-4" />
+        Add Expense
       </Button>
       {open && (
         <ExpenseFormDialog
@@ -85,6 +80,7 @@ export function AddExpenseButton({ onLoadExpenseType = [], onLoadPaymentType = [
           paymentTypes={paymentTypes}
           onSubmit={onAddExpense}
           isSubmitting={submitting}
+          isLoadingOptions={loadingForm}
         />
       )}
     </>

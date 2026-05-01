@@ -37,7 +37,7 @@ function toExpenseDTO(doc: IExpense): ExpenseDTO {
     description: doc.description,
     amount: doc.amount,
     expenseType: extractDocId(doc.expenseType),
-    paymentType: extractName(doc.paymentType),
+    paymentType: extractDocId(doc.paymentType),
     date: doc.date,
   };
 }

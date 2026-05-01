@@ -8,7 +8,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-4 xl:px-0">
+    <main>
       <ProfileClient
         user={{
           id: user._id?.toString(),

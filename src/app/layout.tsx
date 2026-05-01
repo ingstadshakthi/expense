@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import { ThemeProvider } from "../components/providers/theme-provider";
 import { Header } from "../components/layout/header";
 import { AlertDialogProvider } from "@/components/providers/alert-dialog";
 import { LoaderProvider } from "@/components/providers/loader-provider";
 import { Toaster } from "sonner";
 
-const roboto = Roboto({
-  weight: "400",
+const inter = Inter({
+  weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -101,12 +102,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf9f6" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0e11" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body className={`${roboto.className} antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <Toaster position="top-right" richColors closeButton />
         <ThemeProvider
           attribute="class"

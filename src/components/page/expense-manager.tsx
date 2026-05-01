@@ -81,51 +81,101 @@ export function ExpenseManager({ expenseTypes }: Props) {
   };
 
   return (
-    <div className="mx-auto mt-20 max-w-lg px-4">
-      <div className="mb-4 flex flex-wrap gap-3" role="list">
-        {expenseTypes.map(exp => (
-          <div
-            role="listitem"
-            key={exp.id}
-            style={{ backgroundColor: exp.color }}
-            className="flex items-center px-3 py-1"
-          >
-            {/* Edit Button */}
-            <button
-              type="button"
-              onClick={() => handleEdit(exp)}
-              aria-label={`Edit expense type ${exp.name}`}
-              className="flex cursor-pointer items-center px-2 py-1 focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0 focus-visible:outline-none"
-            >
-              <span className="text-white">{exp.name}</span>
-            </button>
-
-            {/* Delete Button */}
-            <button
-              type="button"
-              onClick={() => handleDelete(exp.id)}
-              aria-label={`Delete expense type ${exp.name}`}
-              className="ml-1 p-1 text-white hover:text-red-200 focus:ring-offset-1 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-0 focus-visible:outline-none"
-            >
-              <X size={16} />
-            </button>
-          </div>
-        ))}
+    <div className="mx-auto max-w-2xl space-y-8">
+      {/* Header */}
+      <div className="space-y-1">
+        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-primary">Manage</p>
+        <h1 className="text-2xl font-bold tracking-tight">Expense Categories</h1>
+        <p className="text-sm text-muted-foreground">Add, edit or remove your expense categories.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-4">
-        <div className="flex flex-col gap-6">
-          <Label>Name</Label>
-          <Input value={name} onChange={e => setName(e.target.value)} />
+      {/* Existing Tags */}
+      {expenseTypes.length > 0 && (
+        <div className="border border-border bg-card p-5">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Active Categories ({expenseTypes.length})
+          </p>
+          <div className="flex flex-wrap gap-2" role="list">
+            {expenseTypes.map(exp => (
+              <div
+                role="listitem"
+                key={exp.id}
+                className="group flex items-center gap-1 overflow-hidden border border-transparent transition-all hover:border-border hover:shadow-sm"
+                style={{ backgroundColor: exp.color + "22" }}
+              >
+                <button
+                  type="button"
+                  onClick={() => handleEdit(exp)}
+                  aria-label={`Edit expense type ${exp.name}`}
+                  className="flex cursor-pointer items-center gap-2 px-3 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <span
+                    className="h-2 w-2 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: exp.color }}
+                  />
+                  <span className="text-sm font-medium" style={{ color: exp.color }}>
+                    {exp.name}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(exp.id)}
+                  aria-label={`Delete expense type ${exp.name}`}
+                  className="flex items-center px-2 py-1.5 text-muted-foreground/40 transition-colors hover:text-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
+      )}
 
-        <div className="flex flex-col gap-2">
-          <Label>Color</Label>
-          <ColorPicker value={color} onChange={setColor} />
-        </div>
+      {/* Add / Edit Form */}
+      <div className="border border-border bg-card p-5 space-y-5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          {selected ? "Edit Category" : "New Category"}
+        </p>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-1.5">
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Name
+            </Label>
+            <Input
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="e.g. Food, Transport, Entertainment"
+              className="border-border bg-secondary/30 focus-visible:ring-primary"
+            />
+          </div>
 
-        <Button type="submit">{selected ? "Update" : "Add"} Expense</Button>
-      </form>
+          <div className="flex flex-col gap-1.5">
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Color
+            </Label>
+            <ColorPicker value={color} onChange={setColor} />
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              type="submit"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+            >
+              {selected ? "Update Category" : "Add Category"}
+            </Button>
+            {selected && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => { setSelected(undefined); setName(""); setColor("#f87171"); }}
+                className="rounded-xl"
+              >
+                Cancel
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

@@ -41,15 +41,18 @@ export interface DashboardStats {
   budgetPercentage: number;
 }
 
-export async function getDashboardData(): Promise<DashboardStats | null> {
+export async function getDashboardData(
+  filterYear?: number,
+  filterMonth?: number
+): Promise<DashboardStats | null> {
   try {
     const user = await getUser();
     if (!user) return null;
 
     const userId = new mongoose.Types.ObjectId(user.id);
     const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth() + 1;
+    const currentYear = filterYear ?? now.getFullYear();
+    const currentMonth = filterMonth ?? now.getMonth() + 1;
     const lastMonth = currentMonth === 1 ? 12 : currentMonth - 1;
     const lastMonthYear = currentMonth === 1 ? currentYear - 1 : currentYear;
 
@@ -170,7 +173,9 @@ export async function getDashboardData(): Promise<DashboardStats | null> {
       }
     }
 
-    const monthLabel = now.toLocaleString("default", { month: "long" });
+    const monthLabel = new Date(currentYear, currentMonth - 1, 1).toLocaleString("default", {
+      month: "long",
+    });
 
     // Calculate budget status
     const budget = user.budget || 0;

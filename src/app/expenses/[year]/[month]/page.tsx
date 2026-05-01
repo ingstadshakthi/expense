@@ -47,29 +47,33 @@ export default async function ExpensesPage({ params, searchParams }: Props) {
   } = filteredResponse;
 
   return (
-    <div className="mx-auto space-y-6 max-w-7xl px-4 xl:px-0">
-      <div className="my-2 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-4">
-          <h2 className="text-2xl font-semibold">
+    <div className="mx-auto max-w-7xl space-y-6 px-4 py-8 xl:px-0">
+      {/* Page header */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="space-y-1">
+          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-primary">Expense Ledger</p>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {format(new Date(year, month - 1), "MMMM yyyy")}
-          </h2>
-          <FilterControls currentYear={year} currentMonth={month} />
-          <MultiSelectDropdown
-            label="Expense Type"
-            options={expenseTypes.map(({ name }) => name)}
-            selected={expenseTypeFilter}
-            queryKey="expenseType"
-          />
-
-          <MultiSelectDropdown
-            label="Payment Type"
-            options={paymentTypes.map(({ name }) => name)}
-            selected={paymentTypeFilter}
-            queryKey="paymentType"
-          />
+          </h1>
         </div>
-
         <AddExpenseButton onLoadExpenseType={expenseTypes} onLoadPaymentType={paymentTypes} />
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-3 border border-border bg-card p-3">
+        <FilterControls currentYear={year} currentMonth={month} />
+        <MultiSelectDropdown
+          label="Category"
+          options={expenseTypes.map(({ name }) => name)}
+          selected={expenseTypeFilter}
+          queryKey="expenseType"
+        />
+        <MultiSelectDropdown
+          label="Payment"
+          options={paymentTypes.map(({ name }) => name)}
+          selected={paymentTypeFilter}
+          queryKey="paymentType"
+        />
       </div>
 
       <ExpenseContent

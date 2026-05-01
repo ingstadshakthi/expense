@@ -121,64 +121,83 @@ export function ExpenseContent(props: Props) {
 
   return (
     <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Short Name</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Amount</TableHead>
-            <TableHead>Expense Type</TableHead>
-            <TableHead>Payment Type</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {records.length > 0 ? (
-            records.map(expense => (
-              <TableRow key={expense.id}>
-                <TableCell>{format(new Date(expense.date), "dd MMM yyyy, hh:mm a")}</TableCell>
-                <TableCell>{expense.shortName}</TableCell>
-                <TableCell>{expense.description || "-"}</TableCell>
-                <TableCell>₹{expense.amount.toFixed(2)}</TableCell>
-                <TableCell>
-                  {expenseTypes.find(t => t.id === expense.expenseType)?.name ||
-                    expense.expenseType}
-                </TableCell>
-                <TableCell>{expense.paymentType}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleEdit(expense)}
-                      aria-label={`Edit expense ${expense.shortName}`}
-                      title="Edit expense"
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDelete(expense)}
-                      aria-label={`Delete expense ${expense.shortName}`}
-                      title="Delete expense"
-                    >
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </div>
+      <div className="overflow-hidden border border-border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-border bg-secondary/50 hover:bg-secondary/50">
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Date</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Name</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Description</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Amount</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Category</TableHead>
+              <TableHead className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Payment</TableHead>
+              <TableHead className="text-right text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {records.length > 0 ? (
+              records.map(expense => (
+                <TableRow
+                  key={expense.id}
+                  className="group border-border transition-colors hover:bg-secondary/30"
+                >
+                  <TableCell className="text-xs text-muted-foreground">
+                    {format(new Date(expense.date), "dd MMM yyyy")}
+                    <span className="block text-[10px] text-muted-foreground/50">
+                      {format(new Date(expense.date), "hh:mm a")}
+                    </span>
+                  </TableCell>
+                  <TableCell className="font-medium">{expense.shortName}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">
+                    {expense.description || <span className="text-muted-foreground/30">—</span>}
+                  </TableCell>
+                  <TableCell className="tab-nums font-bold text-foreground">
+                    ₹{expense.amount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  </TableCell>
+                  <TableCell>
+                    <span className="inline-flex items-center border border-border px-2 py-0.5 text-xs font-medium">
+                      {expenseTypes.find(t => t.id === expense.expenseType)?.name ?? expense.expenseType}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="inline-flex items-center border border-border px-2 py-0.5 text-xs font-medium">
+                      {paymentTypes.find(t => t.id === expense.paymentType)?.name ?? "—"}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEdit(expense)}
+                        aria-label={`Edit expense ${expense.shortName}`}
+                        className="h-7 w-7 p-0 hover:bg-blue-500/10 hover:text-blue-500"
+                      >
+                        <Edit2 className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDelete(expense)}
+                        aria-label={`Delete expense ${expense.shortName}`}
+                        className="h-7 w-7 p-0 hover:bg-red-500/10 hover:text-red-500"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="py-16 text-center text-muted-foreground/40">
+                  No expenses found for this period.
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={7} className="py-4 text-center">
-                No matching records found 😢
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
       {editingExpense && (
         <ExpenseFormDialog
@@ -190,7 +209,7 @@ export function ExpenseContent(props: Props) {
             description: editingExpense.description,
             amount: editingExpense.amount,
             expenseType: editingExpense.expenseType,
-            paymentType: paymentTypes.find(p => p.name === editingExpense.paymentType)?.id || "",
+            paymentType: editingExpense.paymentType,
             date: new Date(editingExpense.date),
           }}
           expenseTypes={expenseTypes}
@@ -202,7 +221,7 @@ export function ExpenseContent(props: Props) {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <Pagination className="mt-4">
+        <Pagination className="mt-6">
           <PaginationContent>
             {page > 1 && (
               <PaginationItem>
@@ -212,7 +231,11 @@ export function ExpenseContent(props: Props) {
 
             {Array.from({ length: totalPages }, (_, i) => (
               <PaginationItem key={i}>
-                <PaginationLink href={buildHref(i + 1)} isActive={i + 1 === page}>
+                <PaginationLink
+                  href={buildHref(i + 1)}
+                  isActive={i + 1 === page}
+                  className={i + 1 === page ? "border-primary bg-primary text-primary-foreground hover:bg-primary/90" : ""}
+                >
                   {i + 1}
                 </PaginationLink>
               </PaginationItem>

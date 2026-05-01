@@ -43,7 +43,7 @@ export function FilterControls({ currentYear, currentMonth }: Props) {
           handleNavigate(year, val);
         }}
       >
-        <SelectTrigger className="bg-background w-[140px] border">
+        <SelectTrigger className="h-9 w-[140px] rounded-lg text-sm">
           <SelectValue placeholder="Select month" />
         </SelectTrigger>
         <SelectContent>
@@ -63,7 +63,7 @@ export function FilterControls({ currentYear, currentMonth }: Props) {
           handleNavigate(val, month);
         }}
       >
-        <SelectTrigger className="bg-background w-[100px] border">
+        <SelectTrigger className="h-9 w-[100px] rounded-lg text-sm">
           <SelectValue placeholder="Select year" />
         </SelectTrigger>
         <SelectContent>

@@ -59,7 +59,7 @@ export function MultiSelectDropdown({ label, options, selected, queryKey }: Prop
           variant="outline"
           role="combobox"
           disabled={isPending}
-          className="min-w-[160px] justify-between px-3"
+          className="h-9 min-w-[150px] justify-between rounded-lg px-3 text-sm"
         >
           <span className="truncate">
             {selected.includes("All") ? `${label}: All` : `${label}: ${selected.length} selected`}
