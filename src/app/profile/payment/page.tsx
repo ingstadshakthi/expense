@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getUserPaymentTypes } from "@/controllers/profile/action";
 import { PaymentManager } from "@/components/page/payment-manager";
 

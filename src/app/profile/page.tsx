@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getUser } from "@/controllers/user";
 import { ProfileClient } from "./client";
 

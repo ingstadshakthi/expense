@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { ExpenseManager } from "@/components/page/expense-manager";
 import { getUserExpenseTypes } from "@/controllers/profile/action";
 
