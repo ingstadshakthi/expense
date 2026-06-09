@@ -165,7 +165,7 @@ export function ExpenseContent(props: Props) {
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="flex justify-end gap-1">
                       <Button
                         variant="ghost"
                         size="sm"

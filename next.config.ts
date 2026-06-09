@@ -1,16 +1,9 @@
 import type { NextConfig } from "next";
 import bundleAnalyzer from "@next/bundle-analyzer";
-import withPWA from "next-pwa";
 
 const plugins = [
   bundleAnalyzer({
     enabled: process.env.ANALYZE === "true",
-  }),
-  withPWA({
-    dest: "public",
-    register: true,
-    skipWaiting: true,
-    disable: process.env.NODE_ENV === "development",
   }),
 ];
 
